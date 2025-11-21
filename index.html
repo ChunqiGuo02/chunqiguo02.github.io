@@ -83,19 +83,19 @@ layout: null
       background: var(--extend-color); /* 变为纯色背景（非毛玻璃） */
       backdrop-filter: blur(0); /* 移除模糊 */
       -webkit-backdrop-filter: blur(0);
-      border-bottom: 1px solid transparent !important; /* 显示下边框，与菜单分隔 */
+      border-bottom: 1px solid transparent !important; /* 隐藏下边框 */
     }
 
     .header-logo {
       font-weight: 550;
-      color: var(----menu-text-color) !important;
+      color: var(--menu-text-color) !important; /* 修复：移除多余的横杠 */
       text-decoration: none !important;
       font-size: 1.2rem;
       transition: color 0.2s;
     }
 
     .header-logo:hover {
-      color: var(--) !important;
+      color: var(--accent) !important; /* 修复：替换空的var(--)为强调色 */
       font-weight: 600 !important;
     }
 
@@ -123,20 +123,19 @@ layout: null
       background: var(--muted);
     }
 
-    /* 3. 菜单样式 */
+    /* 菜单样式 */
     .menu-overlay {
       position: fixed;
       top: var(--header-height-expanded); /* 从顶栏下方开始 */
       left: 0;
-      right:0;
-      bottom:0;
+      right: 0;
+      bottom: 0;
       background: var(--overlay);
       z-index: 997;
       opacity: 0;
       pointer-events: none;
-     transition: opacity 0.3s var(--ease);
+      transition: opacity 0.3s var(--ease);
     }
-
 
     .menu-overlay.active {
       opacity: 1;
@@ -146,39 +145,39 @@ layout: null
     .menu-panel {
       position: fixed;
       top: var(--header-height); /* 从顶栏下方开始 */
-      left:-38px;
+      left: 0; /* 修复：移除-38px的偏移，恢复正常对齐 */
       right: 0;
       background: var(--extend-color);
       z-index: 998; /* 低于顶栏z-index */
-      padding: 0 var(--global-padding); /* 移除顶栏高度的偏移 */
+      padding: 0 var(--global-padding);
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.4s var(--ease), padding 0.3s var(--ease); /* 高度过渡动画（延伸感） */
+      transition: max-height 0.4s var(--ease), padding 0.3s var(--ease);
     }
 
     .menu-panel.active {
-      /* 高度设为足够大的值（覆盖内容即可），触发展开动画 */
-     max-height: 800px !important; /* 可根据内容调整，确保大于实际高度 */
-      /* 展开时显示内边距 */
+      max-height: 800px !important;
       padding: 0 var(--space-lg) 30px;
     }
 
-    /* 单列菜单容器：左对齐，添加内边距 */
+    /* 单列菜单容器 */
     .menu-list {
       display: flex;
-      flex-direction: column; /* 垂直排列（单列） */
-      gap:  var(--space-lg) var(--global-padding); /* 统一菜单项间距（可改为md/xs，按需调整） */
-      padding: var(--space-lg) var(--global-padding); /* 左右内边距与顶栏一致 */
+      flex-direction: column;
+      gap: var(--space-lg); /* 修复：gap属性错误，改为单值 */
+      padding: var(--space-lg) var(--global-padding);
     }
 
     .menu-item {
       display: block;
-      text-align: left ; /* 强制左对齐 */
-      font-size: 1.2rem; /* 文字大小可按需调整 */
-      border-bottom: none; /* 移除原有下划线边框 */
-      padding: 0; /* 清除多余内边距（间距由menu-list的gap控制） */
-      color: var(--menu-text-color) !important; /* 绑定文字颜色变量 */
-      transition: color 0.2s; /* 保留hover颜色过渡 */
+      text-align: left;
+      font-size: 1.2rem;
+      border-bottom: none;
+      padding: 0 var(--space-xs);
+      color: var(--menu-text-color) !important;
+      transition: color 0.2s;
+      font-weight: 550;
+      text-decoration: none !important;
     }
 
     .menu-item:hover {
@@ -187,28 +186,20 @@ layout: null
       text-decoration: none !important;
     }
 
-    
-
-    /* 菜单项标题（可选，用于区分主项） */
-    
-    .menu-item {
-      font-size: 1.2rem; /* 子项文字大小（比标题小，保持层级） */
-      font-weight: 550; /* 子项字重（400为正常，300为轻量） */
-      padding: 0 var(--space-xs) ; /* 上下间距（不影响文字大小） */
-    }
-
-     #top, #highlights, #publications, #experience {
+    /* 锚点滚动偏移 */
+    #top, #highlights, #publications, #experience {
       scroll-margin-top: calc(var(--header-height) + var(--space-md));
     }
 
-    /* 4. 页面内容调整 */
+    /* 页面基础样式 */
     body {
       padding-top: var(--header-height) !important;
       background-color: var(--bg) !important;
       color: var(--fg) !important;
-      font-family: 'Arial', 'Arial', sans-serif !important;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important; /* 苹果默认字体 */
       line-height: 1.6;
       transition: all 0.3s var(--ease);
+      margin: 0;
     }
 
     .content-blur {
@@ -216,7 +207,7 @@ layout: null
       transition: filter 0.3s var(--ease);
     }
 
-    /* 5. 时间线样式 (Experience版块) */
+    /* 时间线样式 */
     .experience-section {
       padding: var(--space-xl) 0;
     }
@@ -228,7 +219,6 @@ layout: null
       padding-left: calc(var(--space-lg) * 2);
     }
 
-    /* 垂直时间线 */
     .timeline {
       position: absolute;
       left: var(--space-lg);
@@ -246,14 +236,14 @@ layout: null
       background: var(--card-bg);
       border-radius: var(--radius);
       border: 1px solid var(--border);
-      transition: transform 0.3s var(--ease);
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
     }
 
     .timeline-item:hover {
       transform: translateY(-5px);
+      box-shadow: var(--card-shadow);
     }
 
-    /* 时间点标记 */
     .timeline-dot {
       position: absolute;
       left: calc(-1 * (var(--space-lg) + 12px));
@@ -288,7 +278,7 @@ layout: null
       margin-bottom: var(--space-sm);
     }
 
-    /* 其他原有样式保持不变 */
+    /* 通用容器样式 */
     .container, .hero-body, .section {
       padding-left: var(--global-padding) !important;
       padding-right: var(--global-padding) !important;
@@ -297,6 +287,7 @@ layout: null
       margin-right: auto !important;
     }
 
+    /* 渐入动画 */
     @keyframes fade-in-up {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -313,10 +304,9 @@ layout: null
     .animate-delay-300 { animation-delay: 300ms; }
     .animate-delay-400 { animation-delay: 400ms; }
 
-    
-
+    /* 标题样式 */
     .hero .title b {
-      font-weight: 540; /* 缩减字重，可根据需求改为400/500/600 */
+      font-weight: 540;
       font-size: 2.2rem !important;
     }
 
@@ -328,16 +318,16 @@ layout: null
     }
 
     .intro-content {
-      font-size: 1.05rem !important; /* 比默认增大15%，可调整为1.25rem */
+      font-size: 1.05rem !important;
       letter-spacing: 0.01em !important;
-      line-height: 1.7 !important; /* 增大行高，避免拥挤 */
-      margin-bottom: -60px !important;
+      line-height: 1.7 !important;
+      margin-bottom: 20px !important; /* 修复：移除-60px的负边距，避免内容重叠 */
     }
 
     .subtitle {
-      font-size: 1.25rem !important; /* 比默认增大15%，可调整为1.25rem */
+      font-size: 1.25rem !important;
       letter-spacing: 0.01em !important;
-      line-height: 1.7 !important; /* 增大行高，避免拥挤 */
+      line-height: 1.7 !important;
     }
 
     .title.is-3 {
@@ -350,6 +340,7 @@ layout: null
       margin-bottom: var(--space-lg) !important;
     }
     
+    /* 按钮样式 */
     .buttons {
       display: flex !important;
       flex-wrap: wrap !important;
@@ -375,35 +366,37 @@ layout: null
       box-shadow: 0 11px 19px rgba(60, 60, 60, 0.1) !important;
     }
 
+    /* 卡片样式 */
     .highlight-card {
       background: var(--card-bg) !important;
       border-radius: var(--radius) !important;
-      transition: all 0.3s var(--ease) ;
+      transition: all 0.3s var(--ease);
       margin-bottom: var(--space-xl) !important;
       overflow: hidden !important;
+      height: 100%; /* 确保同排卡片高度一致 */
     }
 
     .publication-block {
       background: var(--card-bg) !important;
       border-radius: var(--radius) !important;
-      transition: all 0.3s var(--ease) ;
+      transition: all 0.3s var(--ease);
       margin-bottom: var(--space-xl) !important;
       box-shadow: 0 11px 19px rgba(60, 60, 60, 0.1) !important;
       overflow: hidden !important;
+      padding: var(--space-md); /* 修复：添加内边距，避免内容贴边 */
     }
 
     .highlight-card:hover {
-      background: var(--card-bg) !important;
       transform: translateY(-10px) !important;
       box-shadow: var(--card-shadow) !important;
     }
 
     .publication-block:hover {
-      background: var(--card-bg) !important;
       transform: translateY(-10px) !important;
       box-shadow: var(--block-shadow) !important;
     }
 
+    /* 媒体内容样式（图片/视频） */
     .highlight-card .card-image {
       padding: 0 !important;
       margin: 0 !important;
@@ -411,44 +404,66 @@ layout: null
 
     .highlight-card img, .highlight-card video {
       width: 100% !important;
-      height: auto !important;
+      height: 200px !important; /* 固定高度，避免拉伸 */
       object-fit: cover !important;
       border-radius: var(--radius) var(--radius) 0 0 !important;
       display: block !important;
+      transition: transform 0.3s var(--ease);
+    }
+
+    .highlight-card:hover img, .highlight-card:hover video {
+      transform: scale(1.03); /* 苹果风格的悬停缩放 */
     }
 
     .publication-image {
-      padding: var(--space-md) !important;
+      padding: 0 !important; /* 修复：移除多余内边距 */
+      position: relative; /* 为视频/图片绝对定位做准备 */
+      height: 180px; /* 固定媒体区域高度 */
+      border-radius: var(--radius);
+      overflow: hidden;
     }
 
-    /* 横屏时：上、下、左与卡片边界紧贴，右侧保留默认内边距（可根据需要调整） */
-   @media (orientation: landscape) {
-    .publication-image, .publication-image video {
-      padding-top: 0 !important;
-      padding-bottom: 0 !important;
-      padding-left: 0 !important;
+    /* 视频覆盖图片的样式（隐藏图片，仅显示视频） */
+    .publication-mousecell video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block !important;
     }
-  }
 
-  /* 竖屏时：上、左、右与卡片边界紧贴，底部保留默认内边距（可根据需要调整） */
-  @media (orientation: portrait) {
-    .publication-image, .publication-image video {
-      padding-top: 0 !important;
-      padding-left: 0 !important;
-      padding-right: 0 !important;
+    .publication-mousecell img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-  }
 
-    
+    /* 响应式媒体样式 */
+    @media (orientation: landscape) {
+      .publication-image, .publication-image video {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        padding-left: 0 !important;
+      }
+    }
 
+    @media (orientation: portrait) {
+      .publication-image, .publication-image video {
+        padding-top: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+      }
+    }
+
+    /* 链接样式 */
     a {
       color: var(--accent) !important;
       text-decoration: none !important;
-    }
-
-    a:hover {
-      text-decoration: none !important;
-      
     }
 
     .author-me {
@@ -456,37 +471,31 @@ layout: null
       color: var(--accent) !important;
     }
 
+    /* 页脚样式 */
     .footer {
       background-color: var(--bg);
       color: var(--menu-text-color) !important;
       padding: var(--space-xl) 0 var(--space-lg) 0 !important;
+      margin-top: var(--space-xl);
     }
 
-    
-
-    
+    /* 滚动条样式（苹果风格） */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
     ::-webkit-scrollbar-thumb {
-      width: 50px;
-      height: 80px;
       background: #d4d4d4;
       border-radius: 999px;
     }
     ::-webkit-scrollbar-thumb:hover {
-      width: 80px;
-      height: 160px;
       background: #636363;
     }
     ::-webkit-scrollbar-track {
-      width: 20px;
       background: var(--bg);
     }
 
-    ::-webkit-scrollbar-track:hover {
-      width: 80px;
-      background: #d4d4d4;
-    }
-
-    /* 确保卡片内文字颜色正确 */
+    /* 卡片内文字颜色 */
     .highlight-title, .highlight-description,
     .publication-title, .publication-authors, 
     .publication-venue, .publication-description {
@@ -495,6 +504,21 @@ layout: null
 
     .highlight-title a, .publication-title a {
       color: var(--accent) !important;
+    }
+
+    /* 响应式布局适配 */
+    @media (max-width: 768px) {
+      .column.is-4 {
+        width: 100% !important;
+        flex: none;
+      }
+      .publication-block.columns {
+        flex-direction: column !important;
+      }
+      .publication-block .column.is-2 {
+        width: 100% !important;
+        margin-bottom: var(--space-md);
+      }
     }
   </style>
 </head>
@@ -512,14 +536,12 @@ layout: null
     </div>
   </header>
 
-  
-
   <!-- 菜单覆盖层 -->
   <div class="menu-overlay" id="menu-overlay"></div>
 
   <!-- 菜单面板 -->
   <div class="menu-panel" id="menu-panel">
-    <div class="menu-list"> <!-- 新增单列容器 -->
+    <div class="menu-list">
       <a href="#highlights" class="menu-item">Highlights</a>
       <a href="#publications" class="menu-item">Publications</a>
       <a href="#experience" class="menu-item">Experience</a>
@@ -535,7 +557,7 @@ layout: null
           <div class="columns">
             <div class="column is-4 animate-delay-100">
               <figure class="image portrait">
-                <img src="{{ '/images/portrait.jpg' | relative_url }}" style="border-radius: 20px; width: 100%;" />
+                <img src="{{ '/images/portrait.jpg' | relative_url }}" style="border-radius: 20px; width: 100%; object-fit: cover;" />
               </figure>
             </div>
             <div class="column animate-delay-200">
@@ -545,21 +567,20 @@ layout: null
               <h4 class="subtitle mb-0">
                 {{ site.position }}, {{ site.affiliation }}
               </h4>
-               <div class="buttons ">
-
-                  <a class="external-link button is-light" href="https://scholar.google.com/citations?user={{ site.google_scholar }}">
-                    <span class="icon"><i class="ai ai-google-scholar"></i></span>
-                    <span>Scholar</span>
-                  </a>
-                  <a class="external-link button is-light" href="https://github.com/ChunqiGuo02">
-                    <span class="icon"><i class="fab fa-github"></i></span>
-                    <span>Github</span>
-                  </a>
-                  <a class="external-link button is-light" href="https://www.linkedin.com/in/chunqi-guo-74a20b38b/">
-                    <span class="icon"><i class="fab fa-linkedin"></i></span>
-                    <span>LinkedIn</span>
-                  </a>
-                </div>
+              <div class="buttons">
+                <a class="external-link button is-light" href="https://scholar.google.com/citations?user={{ site.google_scholar }}">
+                  <span class="icon"><i class="ai ai-google-scholar"></i></span>
+                  <span>Scholar</span>
+                </a>
+                <a class="external-link button is-light" href="https://github.com/ChunqiGuo02">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Github</span>
+                </a>
+                <a class="external-link button is-light" href="https://www.linkedin.com/in/chunqi-guo-74a20b38b/">
+                  <span class="icon"><i class="fab fa-linkedin"></i></span>
+                  <span>LinkedIn</span>
+                </a>
+              </div>
               <div class="content has-text-justified intro-content">
                 {{ site.description | markdownify }}
               </div>
@@ -569,20 +590,18 @@ layout: null
       </div>
     </section>
 
-  
-
     <!-- Highlights区域 -->
     <section id="highlights" class="section animate animate-delay-300">
       <div class="container">
         <h2 class="title is-3">Highlights</h2>
         <div class="columns is-multiline">
           {% for highlight in site.data.highlights %}
-          <div class="column is-4 animate" style="animation-delay: {{ forloop.index * 100 }}ms;">
+          <div class="column is-4 animate" style="animation-delay: {{ forloop.index * 100 }}ms; padding: var(--space-sm);">
             <div class="card highlight-card">
               <div class="card-image">
                 <figure class="image">
                   {% if highlight.video %}
-                  <video autoplay loop muted playsinline class="highlight-media">
+                  <video autoplay loop muted playsinline preload="auto" class="highlight-media">
                     <source src="./images/{{ highlight.video }}" type="video/mp4">
                     <img src="./images/{{ highlight.image }}" alt="{{ highlight.title }}">
                   </video>
@@ -610,7 +629,6 @@ layout: null
       </div>
     </section>
 
-
     <!-- Publications区域 -->
     <section id="publications" class="section animate animate-delay-400">
       <div class="container">
@@ -620,7 +638,7 @@ layout: null
           <div class="column is-2">
             <div class="publication-image {% if publication.image_mouseover %}publication-mousecell{% endif %}">
               {% if publication.image_mouseover contains "mp4" %}
-              <video autoplay preload playsinline height="50%" loop muted width="100%">
+              <video autoplay loop muted playsinline preload="auto" width="100%" height="100%">
                 <source src="./images/{{ publication.image_mouseover }}" type="video/mp4">
                 Your browser does not support the video tag.
               </video>
@@ -679,15 +697,14 @@ layout: null
       </div>
     </section>
 
-    <!-- 新增Experience版块 -->
+    <!-- Experience版块 -->
     <section id="experience" class="section experience-section animate animate-delay-400">
       <div class="container">
         <h2 class="title is-3">Experience</h2>
         <div class="timeline-container">
-          <!-- 垂直时间线 -->
           <div class="timeline"></div>
 
-          <!-- 教育经历1 -->
+          <!-- 教育/经历项 -->
           <div class="timeline-item animate" style="animation-delay: 100ms;">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
@@ -698,7 +715,6 @@ layout: null
             </div>
           </div>
 
-          <!-- 实习经历1 -->
           <div class="timeline-item animate" style="animation-delay: 200ms;">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
@@ -709,7 +725,6 @@ layout: null
             </div>
           </div>
 
-          <!-- 实习经历1 -->
           <div class="timeline-item animate" style="animation-delay: 200ms;">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
@@ -720,28 +735,24 @@ layout: null
             </div>
           </div>
 
-          <!-- 研究经历 -->
           <div class="timeline-item animate" style="animation-delay: 300ms;">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
               <div class="timeline-date">2024 - Present</div>
               <div class="timeline-title">Xishu Classical Gardens Digital Lab, SAU</div>
               <div class="timeline-subtitle">Research Assistant</div>
-              <p>The conservation of lanscape heritage through digital processing and mechine learning.</p>
+              <p>The conservation of landscape heritage through digital processing and machine learning.</p>
             </div>
           </div>
-         
-          
+
           <div class="timeline-item animate" style="animation-delay: 200ms;">
             <div class="timeline-dot"></div>
             <div class="timeline-content">
               <div class="timeline-date">September 2022 - June 2027</div>
               <div class="timeline-title">Sichuan Agricultural University</div>
-        
               <p>B.Sc. in Landscape Architecture<br>B.Sc. in Computer Science and Technology</p>
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -773,7 +784,6 @@ layout: null
     const themeToggle = document.getElementById('theme-toggle');
     const html = document.documentElement;
     
-    // 检查本地存储的主题偏好
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       html.classList.add('dark');
       themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
@@ -794,41 +804,34 @@ layout: null
       }
     });
 
-
     // 菜单功能
     const menuBtn = document.getElementById('menu-btn');
     const menuPanel = document.getElementById('menu-panel');
     const menuOverlay = document.getElementById('menu-overlay');
     const contentWrapper = document.getElementById('content-wrapper');
-    const glassHeader = document.querySelector('.glass-header'); // 顶栏元素
+    const glassHeader = document.querySelector('.glass-header');
     const menuItems = document.querySelectorAll('.menu-item');
-
-    
-    // 状态变量：标记菜单是否展开（默认隐藏）
     let isMenuOpen = false;
 
-    // 菜单按钮点击事件（核心切换逻辑）
+    // 菜单切换逻辑
     menuBtn.addEventListener('click', () => {
       if (isMenuOpen) {
-        // 若已展开，则收起菜单
-        menuPanel.classList.remove('active'); // 菜单面板收起
-        menuOverlay.classList.remove('active'); // 遮罩层隐藏
-        glassHeader.classList.remove('expanded'); // 顶栏恢复原状
-        contentWrapper.classList.remove('content-blur'); // 内容取消模糊
-        document.body.style.overflow = ''; // 恢复页面滚动
+        menuPanel.classList.remove('active');
+        menuOverlay.classList.remove('active');
+        glassHeader.classList.remove('expanded');
+        contentWrapper.classList.remove('content-blur');
+        document.body.style.overflow = '';
       } else {
-        // 若未展开，则展开菜单
-        menuPanel.classList.add('active'); // 菜单面板展开
-        menuOverlay.classList.add('active'); // 遮罩层显示
-        glassHeader.classList.add('expanded'); // 顶栏延伸变纯色
-        contentWrapper.classList.add('content-blur'); // 内容模糊
-        document.body.style.overflow = 'hidden'; // 禁止页面滚动
+        menuPanel.classList.add('active');
+        menuOverlay.classList.add('active');
+        glassHeader.classList.add('expanded');
+        contentWrapper.classList.add('content-blur');
+        document.body.style.overflow = 'hidden';
       }
-      // 切换状态（展开→收起，或收起→展开）
-        isMenuOpen = !isMenuOpen;
+      isMenuOpen = !isMenuOpen;
     });
 
-      // 点击遮罩层也收起菜单（保持原有逻辑）
+    // 遮罩层关闭菜单
     menuOverlay.addEventListener('click', () => {
       if (isMenuOpen) {
         menuPanel.classList.remove('active');
@@ -836,36 +839,23 @@ layout: null
         glassHeader.classList.remove('expanded');
         contentWrapper.classList.remove('content-blur');
         document.body.style.overflow = '';
-        isMenuOpen = false; // 重置状态
+        isMenuOpen = false;
       }
     });
 
-    function openMenu() {
-      glassHeader.classList.add('expanded');
-      menuPanel.classList.add('active');
-      menuOverlay.classList.add('active');
-      contentWrapper.classList.add('content-blur');
-      document.body.style.overflow = 'hidden'; // 防止背景滚动
-    }
-    
-    function closeMenu() {
-      glassHeader.classList.remove('expanded');
-      menuPanel.classList.remove('active');
-      menuOverlay.classList.remove('active');
-      contentWrapper.classList.remove('content-blur');
-      document.body.style.overflow = ''; // 恢复滚动
-      isMenuOpen = false; 
-    }
-    
-    // 点击菜单项跳转并关闭菜单
+    // 菜单项点击跳转并关闭菜单
     menuItems.forEach(item => {
       item.addEventListener('click', (e) => {
         e.preventDefault();
         const targetId = item.getAttribute('href');
         const targetElement = document.querySelector(targetId);
-
         if (targetElement) {
-          closeMenu(); // 调用收起函数
+          menuPanel.classList.remove('active');
+          menuOverlay.classList.remove('active');
+          glassHeader.classList.remove('expanded');
+          contentWrapper.classList.remove('content-blur');
+          document.body.style.overflow = '';
+          isMenuOpen = false;
           setTimeout(() => {
             targetElement.scrollIntoView({ behavior: 'smooth' });
           }, 300);
@@ -873,20 +863,20 @@ layout: null
       });
     });
 
-    // 平滑滚动到顶部
+    // 顶栏logo平滑滚动到顶部
     document.querySelector('.header-logo').addEventListener('click', (e) => {
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // 监听滚动，调整毛玻璃效果（可选增强）
+    // 滚动时调整顶栏毛玻璃效果
     window.addEventListener('scroll', () => {
       const header = document.querySelector('.glass-header');
       if (window.scrollY > 50) {
         header.style.backdropFilter = 'blur(12px)';
         header.style.borderBottom = '1px solid var(--border)';
       } else {
-        header.style.backdropFilter = 'blur(10px)';
+        header.style.backdropFilter = 'blur(35px) brightness(1.05) contrast(1.1)';
         header.style.borderBottom = '1px solid transparent';
       }
     });
