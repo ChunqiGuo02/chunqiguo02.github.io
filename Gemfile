@@ -2,15 +2,14 @@
 
 source "https://rubygems.org"
 
-# gem "rails"
-
-gem "webrick", "~> 1.8"
-
+# 必要依赖：Jekyll 核心（匹配 _config.yml 需求）
 gem "jekyll", "~> 4.3"
 
+# 主题：对应 _config.yml 中的 theme: minima
 gem "minima", "~> 2.5"
 
+# 插件：对应 _config.yml 中的 plugins: - jekyll-feed（必须添加，否则启动会报错）
+gem "jekyll-feed", "~> 0.12"
 
-gem "csv", "~> 3.3"
-
-gem "base64", "~> 0.3.0"
+# Ruby 3.0+ 需手动安装 webrick（Jekyll 依赖，否则可能启动失败）
+gem "webrick", "~> 1.8"
