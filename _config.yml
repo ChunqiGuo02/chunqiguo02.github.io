@@ -20,13 +20,19 @@
 
 title: Chunqi Guo 
 name: Chunqi Guo
-position: RA / Undergraduate
-affiliation: HKUST(GZ) / SAU
+position: Research Assistant
+affiliation: 
 university: Sichaun Agricultural University
 
+site.email: guochunqi02@gmail.com
 email: guochunqi02@gmail.com
-description: >-
-  I am a senior undergraduate and research assistant at [Xishu Classical Gardens Digital Lab, Sichuan Agricultural University](https://www.sicau.edu.cn/), where I am advised by Prof. [Li Guo](https://fjylxy.sicau.edu.cn/info/1155/3717.htm) and Prof. [Shixian Luo](https://scholar.google.com/citations?user=GdYvFX4AAAAJ&hl=zh-CN).I am currently working on Trustworthy AI and Multi-Agent simulation.
+description: |
+  I am a senior undergraduate and research assistant at [Xishu Classical Gardens Digital Lab @Sichuan Agricultural University](https://www.sicau.edu.cn/), where I am advised by Prof. [Li Guo](https://fjylxy.sicau.edu.cn/info/1155/3717.htm) and Prof. [Shixian Luo](https://scholar.google.com/citations?user=GdYvFX4AAAAJ&hl=zh-CN).
+  
+  My research interests span from Trustworthy AI, Open-World tasks, Muti-Agent Simulation issues.  
+  I aim to endow artificial intelligence with more human-like semantic embedding mechanisms and model frameworks that enable interpretable reasoning processes.
+  
+  My motto: The purpose of life is to enjoy every moment.  '刹那即永恒，觉心即意义'
   
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://chunqiguo02.github.io" # the base hostname & protocol for your site, e.g. http://example.com

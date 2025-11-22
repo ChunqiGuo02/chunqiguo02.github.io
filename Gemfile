@@ -13,3 +13,5 @@ gem "jekyll-feed", "~> 0.12"
 
 # Ruby 3.0+ 需手动安装 webrick（Jekyll 依赖，否则可能启动失败）
 gem "webrick", "~> 1.8"
+
+gem "logger", "~> 1.5"

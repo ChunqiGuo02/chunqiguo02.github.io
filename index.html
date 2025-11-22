@@ -16,19 +16,19 @@ layout: null
 
   <style>
     :root {
-      --menu-text-color: #000000; /* 浅色模式黑色 */
+      --menu-text-color: #000000;
       --bg: #f5f5f7;
       --fg: #000000;
       --card-shadow: 0 12px 15px rgba(0, 0, 0, 0.079); 
-      --block-shadow: 0 12px 15px rgba(0, 0, 0, 0.079); 
       --extend-color: #fafafc;
       --accent: #306fdb;
+      --subtitle: #54555a;
       --muted: #f5f5f5;
       --muted-fg: #6b7280;
       --border: #8f8f8f6b;
       --card-bg: #ffffff;
-      --glass-bg: rgba(245, 245, 247, 0.113); /* 毛玻璃背景 */
-      --overlay: rgba(145, 145, 145, 0.086); /* 菜单覆盖层 */
+      --glass-bg: rgba(255, 255, 255, 0.045);
+      --overlay: rgba(145, 145, 145, 0.086);
       --global-padding: 24px;
       --space-xs: 4px;
       --space-sm: 8px;
@@ -37,28 +37,47 @@ layout: null
       --space-xl: 32px;
       --ease: cubic-bezier(0.4, 0, 0.2, 1);
       --radius: 16px;
-      --header-height: 48px; /* 顶栏高度 */
-      --header-height-expanded: 55px;
-      --timeline-width: 4px; /* 时间线宽度 */
+      --header-height: 48px;
+      --header-height-expanded: 48px;
+      --timeline-width: 4px;
     }
 
     .dark {
-      --menu-text-color: #ffffff; /* 深色模式白色 */
+      --menu-text-color: #d8d8d8;
       --bg: #000000;
-      --fg: #f5f5f7;
+      --fg: #d8d8d8;
+      --subtitle: #9498a1;
       --extend-color: #161617;
       --accent: #306fdb;
       --card-shadow: 5px 10px 11px rgba(234, 234, 234, 0.229);
-      --block-shadow: 5px 10px 11px rgba(234, 234, 234, 0.229);
       --muted: #1f1f1f;
       --muted-fg: #e3e3e3;
       --border: #333333;
       --card-bg: #1d1d1f;
-      --glass-bg: rgba(18, 18, 18, 0.589); /* 深色模式毛玻璃 */
-      --overlay: rgba(0, 0, 0, 0.387); /* 深色模式覆盖层 */
+      --glass-bg: rgba(18, 18, 18, 0.695);
+      --overlay: rgba(0, 0, 0, 0.411);
     }
 
-    /* 1. 毛玻璃顶栏样式 */
+    /* 全局设置 */
+    * {
+      -webkit-tap-highlight-color: transparent !important;
+      outline: none !important;
+      box-sizing: border-box;
+    }
+
+    body {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      padding-top: var(--header-height) !important;
+      background-color: var(--bg) !important;
+      color: var(--fg) !important;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
+      line-height: 1.6;
+      transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+      margin: 0;
+    }
+
+    /* 1. 毛玻璃顶栏 */
     .glass-header {
       position: fixed;
       top: 0;
@@ -70,39 +89,35 @@ layout: null
       align-items: center;
       justify-content: space-between;
       background: var(--glass-bg);
-      backdrop-filter: blur(35px)  brightness(1.05) contrast(1.1) !important;
-      -webkit-backdrop-filter: blur(25px) !important;
-      border-bottom: 1px solid transparent;
+      backdrop-filter: blur(28px) saturate(1.8) brightness(0.98) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(1.8) brightness(0.98) !important;
+      border-bottom: 1.2px solid transparent;
       z-index: 999;
-      transition: all 0.3s var(--ease);
+      transition: background-color 0.4s var(--ease), backdrop-filter 0.4s var(--ease), -webkit-backdrop-filter 0.4s var(--ease), height 0.4s var(--ease), border-color 0.4s;
     }
 
-    /* 顶栏展开状态（配合菜单显示） */
     .glass-header.expanded {
-      height: var(--header-height-expanded); /* 高度增加，体现延伸 */
-      background: var(--extend-color); /* 变为纯色背景（非毛玻璃） */
-      backdrop-filter: blur(0); /* 移除模糊 */
-      -webkit-backdrop-filter: blur(0);
-      border-bottom: 1px solid transparent !important; /* 隐藏下边框 */
+      height: var(--header-height-expanded);
+      background: var(--extend-color);
+      backdrop-filter: blur(0px) !important;
+      -webkit-backdrop-filter: blur(0px) !important;
+      border-bottom: 1px solid transparent !important;
     }
 
     .header-logo {
-      font-weight: 570;
-      color: var(--menu-text-color) !important; /* 修复：移除多余的横杠 */
+      font-weight: 600;
+      color: var(--menu-text-color) !important;
       text-decoration: none !important;
       font-size: 1.2rem;
-      transition: color 0.2s;
+      transition: color 0.4s;
     }
-
-    .header-logo:hover {
-      color: var(--accent) !important; /* 修复：替换空的var(--)为强调色 */
-      font-weight: 570 !important;
-    }
+    .header-logo:hover { color: var(--menu-text-color) !important; }
 
     .header-actions {
       display: flex;
       align-items: center;
       gap: var(--space-md);
+      height: 100%; /* 确保高度填满，方便垂直居中 */
     }
 
     .header-btn {
@@ -110,175 +125,110 @@ layout: null
       border: none;
       color: var(--fg);
       cursor: pointer;
-      width: 36px;
-      height: 36px;
+      width: 40px; /* 稍微加大点击区域 */
+      height: 40px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: all 0.2s var(--ease);
+      font-size: 1.1rem;
+      margin: 0;
+      padding: 0;
     }
+    .header-btn:hover { background: var(--muted); }
 
-    .header-btn:hover {
-      background: var(--muted);
+    /* 极简 Apple 风格 SVG Icon 设置 */
+    .theme-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+    }
+    .theme-icon svg {
+      width: 20px; 
+      height: 20px; 
+      stroke: var(--fg); 
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke 0.3s var(--ease);
+    }
+    /* 深色模式下太阳应该是填充的或者线条明亮的，这里统一用线条 */
+    .dark .theme-icon svg {
+      stroke: var(--fg); 
     }
 
     /* 菜单样式 */
     .menu-overlay {
-      position: fixed;
-      top: var(--header-height-expanded); /* 从顶栏下方开始 */
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: var(--overlay);
-      z-index: 997;
-      opacity: 0;
-      pointer-events: none;
+      position: fixed; top: var(--header-height-expanded); left: 0; right: 0; bottom: 0;
+      background: var(--overlay); z-index: 997; opacity: 0; pointer-events: none;
       transition: opacity 0.3s var(--ease);
     }
-
-    .menu-overlay.active {
-      opacity: 1;
-      pointer-events: all;
-    }
+    .menu-overlay.active { opacity: 1; pointer-events: all; }
 
     .menu-panel {
-      position: fixed;
-      top: var(--header-height); /* 从顶栏下方开始 */
-      left: 0; /* 修复：移除-38px的偏移，恢复正常对齐 */
-      right: 0;
-      background: var(--extend-color);
-      z-index: 998; /* 低于顶栏z-index */
-      padding: 0 var(--global-padding);
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.4s var(--ease), padding 0.3s var(--ease);
+      position: fixed; top: var(--header-height); left: 0; right: 0;
+      background: var(--extend-color); z-index: 998; padding: 0 !important;
+      max-height: 0; opacity: 0; visibility: hidden; overflow: hidden;
+      transition: max-height 0.4s var(--ease), opacity 0.4s var(--ease), visibility 0.4s;
     }
+    .menu-panel.active { max-height: 800px !important; opacity: 1; visibility: visible; }
 
-    .menu-panel.active {
-      max-height: 800px !important;
-      padding: 0 var(--space-lg) 30px;
-    }
-
-    /* 单列菜单容器 */
     .menu-list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-lg); /* 修复：gap属性错误，改为单值 */
-      padding: var(--space-lg) var(--global-padding);
+      display: flex; flex-direction: column; gap: var(--space-lg);
+      padding: 12px var(--global-padding) 40px var(--global-padding) !important;
+      width: 100%; margin: 0; box-sizing: border-box;
+    }
+    
+    .menu-list a {
+      border-bottom: none !important;
+    }
+
+    .menu-list a:hover {
+      background-color: transparent !important; /* 顺带移除Bulma默认的hover背景 */
+      text-decoration: none !important;
     }
 
     .menu-item {
-      display: flex;
-      text-align: left;
-      font-size: 1.2rem;
-      border-bottom: none;
-      padding: 0 var(--space-xs);
-      color: var(--menu-text-color) !important;
-      transition: color 0.2s;
-      font-weight: 550;
+      display: block; text-align: left; font-size: 1.2rem;
+      padding: 0 !important; margin: 0 !important;
+      color: var(--menu-text-color) !important; 
+      font-weight: 600;
       text-decoration: none !important;
+      border-bottom: none !important;
+      opacity: 0; transform: translateY(-20px);
+      transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s;
     }
 
     .menu-item:hover {
-      color: var(--accent) !important;
-      font-weight: 550;
-      text-decoration: none !important;
+      text-decoration: none !important; /* 覆盖hover的下划线 */
+      border-bottom: none !important; /* 覆盖hover的底部边框 */
+      box-shadow: none !important; /* 若有底部阴影，也移除 */
     }
+   
+    .menu-panel.active .menu-item { opacity: 1; transform: translateY(0); }
+    .menu-panel.active .menu-item:nth-child(1) { transition-delay: 0.1s; }
+    .menu-panel.active .menu-item:nth-child(2) { transition-delay: 0.2s; }
+    .menu-panel.active .menu-item:nth-child(3) { transition-delay: 0.3s; }
 
-    /* 锚点滚动偏移 */
+    /* 锚点偏移 */
     #top, #highlights, #publications, #experience {
       scroll-margin-top: calc(var(--header-height) + var(--space-md));
     }
 
-    /* 页面基础样式 */
-    body {
-      padding-top: var(--header-height) !important;
-      background-color: var(--bg) !important;
-      color: var(--fg) !important;
-      font-family: -apple-system, BlinkMacSystemFont, 'Arial', Arial, sans-serif !important; /* 苹果默认字体 */
-      line-height: 1.6;
-      transition: all 0.3s var(--ease);
-      margin: 0;
+    .menu-item::after,
+    .menu-item::before {
+      content: none !important; /* 清除伪元素内容 */
+      display: none !important; /* 隐藏伪元素 */
     }
 
-    .content-blur {
-      filter: blur(13px);
-      transition: filter 0.3s var(--ease);
-    }
+    #content-wrapper { transition: filter 0.2s var(--ease); }
+    .content-blur { filter: blur(13px); transition: filter 0.4s var(--ease); }
 
-    /* 时间线样式 */
-    .experience-section {
-      padding: var(--space-xl) 0;
-    }
-
-    .timeline-container {
-      position: relative;
-      max-width: 1000px;
-      margin: 0 auto;
-      padding-left: calc(var(--space-lg) * 2);
-    }
-
-    .timeline {
-      position: absolute;
-      left: var(--space-lg);
-      top: 0;
-      bottom: 0;
-      width: var(--timeline-width);
-      background: var(--accent);
-      border-radius: calc(var(--timeline-width) / 2);
-    }
-
-    .timeline-item {
-      position: relative;
-      margin-bottom: var(--space-xl);
-      padding: var(--space-lg);
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
-    }
-
-    .timeline-item:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--card-shadow);
-    }
-
-    .timeline-dot {
-      position: absolute;
-      left: calc(-1 * (var(--space-lg) + 12px));
-      top: var(--space-lg);
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: var(--accent);
-      border: 4px solid var(--bg);
-      z-index: 1;
-    }
-
-    .timeline-content {
-      margin-left: var(--space-md);
-    }
-
-    .timeline-date {
-      color: var(--muted-fg);
-      font-size: 0.9rem;
-      margin-bottom: var(--space-xs);
-    }
-
-    .timeline-title {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin-bottom: var(--space-xs);
-      color: var(--fg);
-    }
-
-    .timeline-subtitle {
-      color: var(--accent);
-      margin-bottom: var(--space-sm);
-    }
-
-    /* 通用容器样式 */
+    /* 容器 */
     .container, .hero-body, .section {
       padding-left: var(--global-padding) !important;
       padding-right: var(--global-padding) !important;
@@ -287,241 +237,223 @@ layout: null
       margin-right: auto !important;
     }
 
-    /* 渐入动画 */
-    @keyframes fade-in-up {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .animate {
-      opacity: 0;
-      animation: fade-in-up 0.6s var(--ease) forwards;
-      animation-fill-mode: forwards;
-    }
-
-    .animate-delay-100 { animation-delay: 100ms; }
-    .animate-delay-200 { animation-delay: 200ms; }
-    .animate-delay-300 { animation-delay: 300ms; }
-    .animate-delay-400 { animation-delay: 400ms; }
-
-    /* 标题样式 */
-    .hero .title b {
-      font-weight: 600;
+    /* 字体样式修正 */
+    /* 修复名字太粗：移除 b 标签，使用 font-weight: 500 */
+    .name-title {
+      font-weight: 600 !important; /* Medium 字重 */
       font-size: 2.2rem !important;
-    }
-
-    .title {
-      font-weight: 600 !important;
-      letter-spacing: 0.01em !important;
+      letter-spacing: -0.02em !important; /* 稍微收紧一点字距，显得更精致 */
       color: var(--fg) !important;
-      margin-bottom: 20px !important;
     }
 
-    .intro-content {
-      font-size: 1.05rem !important;
-      letter-spacing: 0.01em !important;
-      line-height: 1.7 !important;
-      margin-bottom: 20px !important; /* 修复：移除-60px的负边距，避免内容重叠 */
-    }
+    .title { font-weight: 600 !important; color: var(--fg) !important; margin-bottom: 25px !important; }
+    .subtitle { font-weight: 500 !important;color: var(--subtitle) !important; margin-bottom: 15px !important;}
+    .title.is-3 { font-size: clamp(1.75rem, 6.5vw, 3rem) !important; margin-bottom: 40px !important; }
+    .intro-content { font-size:1.05em;letter-spacing: -0.011em !important;font-weight: 500;color: var(--subtitle) !important; margin-bottom: -40px !important;}
+    .content p { color: var(--subtitle) !important; }
 
-    .subtitle {
-      font-size: 1.12rem !important;
-      letter-spacing: 0.01em !important;
-      line-height: 1.7 !important;
-      margin-bottom: -10px !important;
-    }
-
-    .title.is-3 {
-      font-size: clamp(1.75rem, 6.5vw, 3rem) !important;
-      margin-bottom: 40px !important;
-    }
-
-    .title.is-5 {
-      font-size: clamp(1.125rem, 6vw, 1.5rem) !important;
-      margin-bottom: var(--space-lg) !important;
+    /* 按钮 */
+    .buttons { display: flex !important; flex-wrap: wrap !important;margin-bottom: 10px !important;margin-left: -3px !important;gap: var(--space-sm) !important; margin-top: var(--space-md) !important; }
+    .button.is-light {
+      background: var(--card-bg) !important; border: 1px solid var(--border) !important;
+      border-radius: 60px !important; color: var(--fg) !important;
+      transition: 0.2s var(--ease);
     }
     
-    /* 按钮样式 */
-    .buttons {
-      display: flex !important;
-      flex-wrap: wrap !important;
-      gap: var(--space-sm) !important;
-      margin-top: var(--space-md) !important;
-    }
-
-    .button.is-light {
-      background: #306fdb !important;
-      border: 1px solid var(--border) !important;
-      border-radius: 50px !important;
-      backdrop-filter: blur(20px) !important;
-      height: 35px !important;
-      padding: 0 var(--space-md) !important;
-      transition: all 0.3s var(--ease) !important;
-      color: #ffffff !important;
-    }
-
     .button.is-light:hover {
-      background: var(--card-bg) !important;
-      transform: translateY(-1px) !important;
-      color: #306fdb !important;
-      box-shadow: 0 11px 19px rgba(60, 60, 60, 0.1) !important;
+      background-color: var(--accent);
+      color: var(--accent) !important; 
+      transform: translateY(-2px) !important;
+      box-shadow: var(--card-shadow) !important;
     }
 
-    /* 卡片样式 */
+    /* =========================================
+       统一卡片样式 (Highlights & Publications)
+       ========================================= */
     .highlight-card {
       background: var(--card-bg) !important;
       border-radius: var(--radius) !important;
       transition: all 0.3s var(--ease);
       margin-bottom: var(--space-xl) !important;
       overflow: hidden !important;
-      height: 100%; /* 确保同排卡片高度一致 */
+      height: 100%;
+      border: 1px solid transparent;
+      display: flex;
+      flex-direction: column;
     }
-
-    .publication-block {
-      background: var(--card-bg) !important;
-      border-radius: var(--radius) !important;
-      transition: all 0.3s var(--ease);
-      margin-bottom: var(--space-xl) !important;
-      box-shadow: 0 11px 19px rgba(60, 60, 60, 0.1) !important;
-      overflow: hidden !important;
-      padding: var(--space-md); /* 修复：添加内边距，避免内容贴边 */
-    }
-
     .highlight-card:hover {
       transform: translateY(-10px) !important;
       box-shadow: var(--card-shadow) !important;
     }
-
-    .publication-block:hover {
-      transform: translateY(-10px) !important;
-      box-shadow: var(--block-shadow) !important;
+    
+    .card-image {
+      padding: 0 !important; margin: 0 !important;
+      width: 100%; 
+      /* 修复视频裁切：改为 aspect-ratio: 16/9，高度自适应 */
+      aspect-ratio: 16/10;
+      height: auto !important; 
+      position: relative; overflow: hidden;
+      background: #000; /* 防止视频加载前闪白 */
     }
-
-    /* 媒体内容样式（图片/视频） */
-    .highlight-card .card-image {
-      padding: 0 !important;
-      margin: 0 !important;
-    }
-
     .highlight-card img, .highlight-card video {
-      width: 100% !important;
-      height: 200px !important; /* 固定高度，避免拉伸 */
-      object-fit: cover !important;
-      border-radius: var(--radius) var(--radius) 0 0 !important;
+      width: 100% !important; height: 100% !important; 
+      object-fit: cover !important; /* 保持填满，因为有 aspect-ratio，裁切会很少 */
       display: block !important;
       transition: transform 0.3s var(--ease);
     }
-
     .highlight-card:hover img, .highlight-card:hover video {
-      transform: scale(1.03); /* 苹果风格的悬停缩放 */
+      transform: scale(1.03);
     }
 
-    .publication-image {
-      padding: 0 !important; /* 修复：移除多余内边距 */
-      position: relative; /* 为视频/图片绝对定位做准备 */
-      height: 180px; /* 固定媒体区域高度 */
-      border-radius: var(--radius);
-      overflow: hidden;
+    .card-content {
+      padding: var(--space-md);
+      flex-grow: 1;
+      display: flex; flex-direction: column;
     }
 
-    /* 视频覆盖图片的样式（隐藏图片，仅显示视频） */
-    .publication-mousecell video {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block !important;
-    }
-
-    .publication-mousecell img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* 响应式媒体样式 */
-    @media (orientation: landscape) {
-      .publication-image, .publication-image video {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-        padding-left: 0 !important;
-      }
-    }
-
-    @media (orientation: portrait) {
-      .publication-image, .publication-image video {
-        padding-top: 0 !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-      }
-    }
-
-    /* 链接样式 */
-    a {
-      color: var(--accent) !important;
-      text-decoration: none !important;
-    }
-
-    .author-me {
-      font-weight: 500 !important;
-      color: var(--accent) !important;
-    }
-
-    /* 页脚样式 */
-    .footer {
-      background-color: var(--bg);
-      color: var(--menu-text-color) !important;
-      padding: var(--space-xl) 0 var(--space-lg) 0 !important;
-      margin-top: var(--space-xl);
-    }
-
-    /* 滚动条样式（苹果风格） */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #d4d4d4;
-      border-radius: 999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #636363;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--bg);
-    }
-
-    /* 卡片内文字颜色 */
-    .highlight-title, .highlight-description,
-    .publication-title, .publication-authors, 
-    .publication-venue, .publication-description {
+    /* 卡片内文本 */
+    .highlight-title, .publication-title {
+      font-size: 1.25rem; font-weight: 600; margin-bottom: var(--space-xs); line-height: 1.4;
       color: var(--fg) !important;
     }
+    .highlight-title a, .publication-title a { transition: 0.4s var(--ease) !important;color: var(--fg) !important; }
+    .highlight-title a:hover, .publication-title a:hover {transform: translateY(-2px) !important; color: var(--accent) !important; }
 
-    .highlight-title a, .publication-title a {
-      color: var(--accent) !important;
+    .publication-authors {
+      font-size: 0.95rem; margin: var(--space-xs) 0; color: var(--bg) !important; line-height: 1.4;
+    }
+    .author-block a { color: var(--subtitle) !important; }
+    .author-block a:hover { color: var(--fg) !important; }
+    .author-me { font-weight: 600; color: var(--accent) !important; }
+    
+    .publication-venue {
+      font-size: 0.9rem; color: var(--accent); margin-bottom: var(--space-sm);
+    }
+    .publication-description {
+      font-size: 0.98rem; color: var(--fg) !important; margin-bottom: var(--space-md) !important; flex-grow: 1;
     }
 
-    /* 响应式布局适配 */
+    .highlight-description {
+      font-size: 0.99rem; color: var(--subtitle) !important;margin-top: -12px !important; margin-bottom: 5px !important; flex-grow: 1;
+    }
+
+    /* 卡片底部按钮 */
+    .card-links.buttons {
+      margin-top: auto !important; justify-content: flex-start !important; gap: 8px !important;
+    }
+    .card-links .button {
+      font-size: 0.9rem !important; height: auto !important;
+      padding: 5px 12px !important;
+      margin-top: auto !important;
+      margin-bottom: auto !important;
+      transition: 0.4s var(--ease);
+      background: transparent !important; color: var(--fg) !important;
+      border: 1px solid var(--border) !important; border-radius: 11px !important;
+    }
+    .card-links .button:hover {
+      background: var(--card-bg) !important; color: var(--accent) !important;transform: translateY(-5px) !important;border-color: var(--border) !important;
+    }
+
+    .grid-column { padding: var(--space-md) !important; }
+
+    /* Experience 时间线 (左对齐) */
+    .experience-section { padding: var(--space-xl) 0; }
+    .timeline-container {
+      position: relative; margin: 0; margin-left: var(--space-md);
+      padding-left: calc(var(--space-lg) * 2); max-width: 1000px;
+    }
+    .timeline {
+      position: absolute; left: var(--space-lg); top: 0; bottom: 0;
+      width: var(--timeline-width); background: var(--accent); border-radius: calc(var(--timeline-width) / 2);
+    }
+    .timeline-dot {
+      position: absolute; left: calc(-1 * (var(--space-lg) + 12px)); top: var(--space-lg);
+      width: 24px; height: 24px; border-radius: 50%; background: var(--accent); border: 4px solid var(--bg);
+      z-index: 1;
+    }
+    .timeline-item {
+      position: relative; margin-bottom: var(--space-xl); padding: var(--space-lg);
+      background: var(--card-bg); border-radius: var(--radius); border: 1px solid var(--border);
+      transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+    }
+    .timeline-item:hover { transform: translateY(-5px); box-shadow: var(--card-shadow); }
+    .timeline-title { font-size: 1.3rem; font-weight: 600; margin-bottom: var(--space-xs); color: var(--fg); }
+    .timeline-subtitle { color: var(--accent); margin-bottom: var(--space-sm); }
+    .timeline-date { color: var(--muted-fg); font-size: 0.9rem; margin-bottom: var(--space-xs); }
+
     @media (max-width: 768px) {
-      .column.is-4 {
-        width: 100% !important;
-        flex: none;
-      }
-      .publication-block.columns {
-        flex-direction: column !important;
-      }
-      .publication-block .column.is-2 {
-        width: 100% !important;
-        margin-bottom: var(--space-md);
+      .column.is-4 { width: 100% !important; flex: none; }
+      .timeline-container { margin-left: 0; padding-left: var(--space-lg); } 
+      .timeline { left: 0; }
+      .timeline-dot { left: -11px; }
+      .timeline-logo {
+        width: 48px;
+        height: 48px;
       }
     }
+
+    /* --- 修改后：去除边框的 Timeline Logo 样式 --- */
+    .timeline-inner {
+      display: flex;
+      align-items: flex-start; /* Logo 与文字顶部对齐 */
+      gap: var(--space-md);    /* Logo 与文字之间的间距 */
+    }
+
+    .timeline-logo {
+      flex-shrink: 0;          /* 防止 Logo 被压缩 */
+      width: 58px;             /* 稍微调整大小，无框模式下不需要太大 */
+      height: 58px;            
+      margin-top: 2px;         /* 微调垂直位置，使其与标题文字视觉中心对齐 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .timeline-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;     /* 保持图片比例 */
+      border-radius: 50%;      /* 如果您想要圆形的 Logo (如校徽)，保留此行；如果想要原图形状，请删除此行 */
+      
+      /* 可选：添加非常淡的阴影让 Logo 更立体一点点，不喜欢可删除 */
+      filter: drop-shadow(0 8px 8px rgba(0, 0, 0, 0.175)); 
+    }
+
+     /* --- 深色模式适配 (重要) --- */
+    /* 因为去掉了白色底框，如果 Logo 是深色的，在黑底上会看不清 */
+    /* 下面的代码会让 Logo 在深色模式下稍微变亮，或者加一个半透明白底 */
+    .dark .timeline-logo img {
+      /* 方案 A: 稍微增加亮度和对比度 (适合彩色 Logo) */
+      filter: brightness(1.1) contrast(1.1);
+      
+      /* 方案 B: 如果 Logo 是纯黑色的，反转为白色 (取消下面注释即可使用) */
+      /* filter: invert(1) brightness(2); */
+      
+      /* 方案 C: 给 Logo 本身加一个淡淡的白色光晕 (取消下面注释即可使用) */
+      
+    }
+
+    @keyframes fade-in-up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .animate { opacity: 0; animation: fade-in-up 0.6s var(--ease) forwards; }
+
+    a { color: var(--fg) !important; text-decoration: none; }
+    .footer { background-color: var(--bg); color: var(--menu-text-color) !important; padding: 10px !important; }
   </style>
+
+  <!-- 防闪烁脚本：必须放在 head 里 -->
+  <script>
+    (function() {
+      // 获取本地存储和系统偏好
+      var localTheme = localStorage.getItem('theme');
+      var systemPref = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      // 如果本地存了 dark，或者没存但在系统偏好里是 dark
+      if (localTheme === 'dark' || (!localTheme && systemPref)) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+  
 </head>
 <body>
   <!-- 毛玻璃顶栏 -->
@@ -529,7 +461,7 @@ layout: null
     <a href="#top" class="header-logo">HomePage</a>
     <div class="header-actions">
       <button id="theme-toggle" class="header-btn" aria-label="Toggle theme">
-        <i class="fas fa-moon"></i>
+        <span class="theme-icon"></span>
       </button>
       <button id="menu-btn" class="header-btn" aria-label="Menu">
         <i class="fas fa-bars"></i>
@@ -537,10 +469,7 @@ layout: null
     </div>
   </header>
 
-  <!-- 菜单覆盖层 -->
   <div class="menu-overlay" id="menu-overlay"></div>
-
-  <!-- 菜单面板 -->
   <div class="menu-panel" id="menu-panel">
     <div class="menu-list">
       <a href="#highlights" class="menu-item">Highlights</a>
@@ -549,7 +478,6 @@ layout: null
     </div>
   </div>
 
-  <!-- 页面内容 -->
   <div id="content-wrapper">
     <!-- 头部区域 -->
     <section id="top" class="hero animate">
@@ -558,32 +486,29 @@ layout: null
           <div class="columns">
             <div class="column is-4 animate-delay-100">
               <figure class="image portrait">
-                <img src="{{ '/images/portrait.jpg' | relative_url }}" style="border-radius: 15px; width: 100%; object-fit: cover;" />
+                <img src="{{ '/images/portrait.jpg' | relative_url }}" style="border-radius: 10px; width: 100%; object-fit: cover;" />
               </figure>
             </div>
             <div class="column animate-delay-200">
-              <h1 class="title">
-                <b>{{ site.name }}</b>
+              <!-- 修复名字字重问题：移除 <b>，使用 class 控制 -->
+              <h1 class="title name-title">
+                {{ site.name }}
               </h1>
-              <h4 class="subtitle mb-0">
-                {{ site.position }}, {{ site.affiliation }}
-              </h4>
+              <h4 class="subtitle mb-0">{{ site.position }}  {{site.affiliation }}</h4>
               <div class="buttons">
-                <a class="external-link button is-light" href="https://scholar.google.com/citations?user={{ site.google_scholar }}">
-                  <span class="icon"><i class="ai ai-google-scholar"></i></span>
-                  <span>Scholar</span>
+                <a class="external-link button is-light" href="guochunqi02@gmail.com">
+                  <span class="icon"><i class="fa fa-envelope"></i></span>
                 </a>
+                
+                
                 <a class="external-link button is-light" href="https://github.com/ChunqiGuo02">
                   <span class="icon"><i class="fab fa-github"></i></span>
-                  <span>Github</span>
                 </a>
                 <a class="external-link button is-light" href="https://www.linkedin.com/in/chunqi-guo-74a20b38b/">
                   <span class="icon"><i class="fab fa-linkedin"></i></span>
-                  <span>LinkedIn</span>
                 </a>
-                <a class="external-link button is-light" href="guochunqi02@gmail.com">
-                  <span class="icon"><i class="fa fa-envelope"></i></span>
-                  <span>Email</span>
+                <a class="external-link button is-light" href="https://scholar.google.com/citations?user={{ site.google_scholar }}">
+                  <span class="icon"><i class="ai ai-google-scholar"></i></span>
                 </a>
               </div>
               <div class="content has-text-justified intro-content">
@@ -601,12 +526,12 @@ layout: null
         <h2 class="title is-3">Highlights</h2>
         <div class="columns is-multiline">
           {% for highlight in site.data.highlights %}
-          <div class="column is-4 animate" style="animation-delay: {{ forloop.index * 100 }}ms; padding: var(--space-sm);">
+          <div class="column is-4 animate grid-column" style="animation-delay: {{ forloop.index * 100 }}ms;">
             <div class="card highlight-card">
               <div class="card-image">
                 <figure class="image">
                   {% if highlight.video %}
-                  <video autoplay loop muted playsinline preload="auto" class="highlight-media">
+                  <video autoplay loop muted playsinline preload="auto">
                     <source src="./images/{{ highlight.video }}" type="video/mp4">
                     <img src="./images/{{ highlight.image }}" alt="{{ highlight.title }}">
                   </video>
@@ -615,15 +540,11 @@ layout: null
                   {% endif %}
                 </figure>
               </div>
-              <div class="card-content" style="padding: var(--space-md);">
-                <div class="media">
-                  <div class="media-content">
-                    <p class="title is-5 highlight-title">
-                      <a href="{{ highlight.url }}" target="_blank" rel="noopener">{{ highlight.title }}</a>
-                    </p>
-                  </div>
-                </div>
-                <div class="content highlight-description" style="margin-top: var(--space-sm);">
+              <div class="card-content">
+                <p class="title highlight-title">
+                  <a href="{{ highlight.url }}" target="_blank" rel="noopener">{{ highlight.title }}</a>
+                </p>
+                <div class="content highlight-description">
                   {{ highlight.description }}
                 </div>
               </div>
@@ -638,67 +559,71 @@ layout: null
     <section id="publications" class="section animate animate-delay-400">
       <div class="container">
         <h2 class="title is-3">Publications</h2>
-        {% for publication in site.data.publications %}
-        <div class="publication-block columns animate" style="animation-delay: {{ forloop.index * 150 }}ms;">
-          <div class="column is-2">
-            <div class="publication-image {% if publication.image_mouseover %}publication-mousecell{% endif %}">
-              {% if publication.image_mouseover contains "mp4" %}
-              <video autoplay loop muted playsinline preload="auto" width="100%" height="100%">
-                <source src="./images/{{ publication.image_mouseover }}" type="video/mp4">
-                Your browser does not support the video tag.
-              </video>
-              {% endif %}
-              <img alt="{{ publication.title }}" src="./images/{{ publication.image }}" />
-            </div>
-          </div>
-          <div class="column" style="padding: var(--space-lg);">
-            <div class="content">
-              <h3 class="publication-title"><a href="{{ publication.project_page }}">{{ publication.title }}</a></h3>
-              <div class="publication-authors" style="margin: var(--space-sm) 0;">
-                {% for author_id in publication.authors %}
-                {% assign author = site.data.authors[author_id] %}
-                <span class="author-block {% if author.is_me %}author-me{% endif %}">
-                  {% if author.is_me %}
-                  {{ author.first_name }} {{author.middle_name}} {{ author.last_name }}{% if forloop.last == false %},{% endif %}
+        <div class="columns is-multiline">
+          {% for publication in site.data.publications %}
+          <div class="column is-4 animate grid-column" style="animation-delay: {{ forloop.index * 150 }}ms;">
+            <div class="card highlight-card">
+              <div class="card-image">
+                <figure class="image">
+                  {% if publication.image_mouseover contains "mp4" %}
+                  <video autoplay loop muted playsinline preload="auto">
+                    <source src="./images/{{ publication.image_mouseover }}" type="video/mp4">
+                    <img src="./images/{{ publication.image }}" alt="{{ publication.title }}">
+                  </video>
                   {% else %}
-                  <a href="{{ author.website }}">{{ author.first_name }} {{ author.middle_name }} {{ author.last_name }}</a>{% if forloop.last == false %},{% endif %}
+                  <img src="./images/{{ publication.image }}" alt="{{ publication.title }}">
                   {% endif %}
-                </span>
-                {% endfor %}
+                </figure>
               </div>
-              <div class="publication-venue" style="color: var(--muted-fg); margin: var(--space-sm) 0;">
-                <span>{{ publication.venue }}</span>
-                {% for award in publication.awards %}
-                <span class="publication-venue-emph" style="color: var(--accent); margin-left: var(--space-xs);">
-                  {{ award }}
-                </span>
-                {% endfor %}
-              </div>
-              <p class="publication-description" style="margin: var(--space-sm) 0;">{{ publication.description }}</p>
-              <div class="publication-links buttons field has-addons" style="margin-top: var(--space-md);">
-                <a class="external-link button is-small is-ghost" href="{{ publication.project_page }}">
-                  <span class="icon"><i class="fas fa-globe-asia"></i></span>
-                  <span>Project Page</span>
-                </a>
-                <a class="external-link button is-small is-ghost" href="https://arxiv.org/pdf/{{ publication.arxiv }}.pdf">
-                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                  <span>PDF</span>
-                </a>
-                <a class="external-link button is-small is-ghost" href="https://arxiv.org/abs/{{ publication.arxiv }}">
-                  <span class="icon"><i class="ai ai-arxiv"></i></span>
-                  <span>arXiv</span>
-                </a>
-                {% if publication.github %}
-                <a class="external-link button is-small is-ghost" href="https://github.com/{{ publication.github }}">
-                  <span class="icon"><i class="fab fa-github"></i></span>
-                  <span>Code</span>
-                </a>
-                {% endif %}
+              
+              <div class="card-content">
+                <h3 class="publication-title"><a href="{{ publication.project_page }}">{{ publication.title }}</a></h3>
+                
+                <div class="publication-authors">
+                  {% for author_id in publication.authors %}
+                  {% assign author = site.data.authors[author_id] %}
+                  <span class="author-block {% if author.is_me %}author-me{% endif %}">
+                    {% if author.is_me %}
+                    {{ author.first_name }} {{author.middle_name}} {{ author.last_name }}{% if forloop.last == false %},{% endif %}
+                    {% else %}
+                    <a href="{{ author.website }}">{{ author.first_name }} {{ author.middle_name }} {{ author.last_name }}</a>{% if forloop.last == false %},{% endif %}
+                    {% endif %}
+                  </span>
+                  {% endfor %}
+                </div>
+                
+                <div class="publication-venue">
+                  <span>{{ publication.venue }}</span>
+                  {% for award in publication.awards %}
+                  <span class="publication-venue-emph" style="color: var(--accent); margin-left: var(--space-xs);">
+                    {{ award }}
+                  </span>
+                  {% endfor %}
+                </div>
+                
+                <p class="publication-description">{{ publication.description }}</p>
+                
+                <div class="card-links buttons">
+                  <a class="external-link button" href="{{ publication.project_page }}">
+                    <span class="icon"><i class="fas fa-globe-asia"></i></span><span>Project</span>
+                  </a>
+                  <a class="external-link button" href="https://arxiv.org/pdf/{{ publication.arxiv }}.pdf">
+                    <span class="icon"><i class="fas fa-file-pdf"></i></span><span>PDF</span>
+                  </a>
+                  <a class="external-link button" href="https://arxiv.org/abs/{{ publication.arxiv }}">
+                    <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
+                  </a>
+                  {% if publication.github %}
+                  <a class="external-link button" href="https://github.com/{{ publication.github }}">
+                    <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
+                  </a>
+                  {% endif %}
+                </div>
               </div>
             </div>
           </div>
+          {% endfor %}
         </div>
-        {% endfor %}
       </div>
     </section>
 
@@ -708,61 +633,92 @@ layout: null
         <h2 class="title is-3">Experience</h2>
         <div class="timeline-container">
           <div class="timeline"></div>
-
-          <!-- 教育/经历项 -->
+          
+          <!-- Item 1: HKUST(GZ) -->
           <div class="timeline-item animate" style="animation-delay: 100ms;">
             <div class="timeline-dot"></div>
-            <div class="timeline-content">
-              <div class="timeline-date">September 2025 - Present</div>
-              <div class="timeline-title">The Hong Kong University of Science and Technology (Guangzhou)</div>
-              <div class="timeline-subtitle">Remote Research Collaboration</div>
-              <p>Next-gen learning method for neural networks.</p>
+            <div class="timeline-inner">
+              <!-- Logo -->
+              <div class="timeline-logo">
+                <img src="{{ '/images/hkust_logo.png' | relative_url }}" alt="HKUST Logo">
+              </div>
+              <!-- Content -->
+              <div class="timeline-content">
+                <div class="timeline-date">September 2025 - Present</div>
+                <div class="timeline-title">The Hong Kong University of Science and Technology (Guangzhou)</div>
+                <div class="timeline-subtitle">Remote Research Collaboration</div>
+                <p>Next-gen learning method for neural networks.</p>
+              </div>
             </div>
           </div>
 
+          <!-- Item 2: UCI -->
           <div class="timeline-item animate" style="animation-delay: 200ms;">
             <div class="timeline-dot"></div>
-            <div class="timeline-content">
-              <div class="timeline-date">Summer 2025</div>
-              <div class="timeline-title">University of California, Irvine</div>
-              <div class="timeline-subtitle">Remote Research Collaboration</div>
-              <p>Open-set semi-supervised object classification</p>
+            <div class="timeline-inner">
+              <div class="timeline-logo">
+                <img src="{{ '/images/uci_logo.png' | relative_url }}" alt="UCI Logo">
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-date">Summer 2025</div>
+                <div class="timeline-title">University of California, Irvine</div>
+                <div class="timeline-subtitle">Remote Research Collaboration</div>
+                <p>Open-set semi-supervised object classification</p>
+              </div>
             </div>
           </div>
 
+          <!-- Item 3: University of Macau -->
           <div class="timeline-item animate" style="animation-delay: 200ms;">
             <div class="timeline-dot"></div>
-            <div class="timeline-content">
-              <div class="timeline-date">Winter 2025</div>
-              <div class="timeline-title">University of Macau</div>
-              <div class="timeline-subtitle">Remote Research Collaboration</div>
-              <p>Cross-domain few-shot annotation detection model for the urban sewer system.</p>
+            <div class="timeline-inner">
+              <div class="timeline-logo">
+                <img src="{{ '/images/um_logo.png' | relative_url }}" alt="UM Logo">
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-date">Winter 2025</div>
+                <div class="timeline-title">University of Macau</div>
+                <div class="timeline-subtitle">Remote Research Collaboration</div>
+                <p>Cross-domain few-shot annotation detection model for the urban sewer system.</p>
+              </div>
             </div>
           </div>
 
+          <!-- Item 4: SAU (Lab) -->
           <div class="timeline-item animate" style="animation-delay: 300ms;">
             <div class="timeline-dot"></div>
-            <div class="timeline-content">
-              <div class="timeline-date">2024 - Present</div>
-              <div class="timeline-title">Xishu Classical Gardens Digital Lab, SAU</div>
-              <div class="timeline-subtitle">Research Assistant</div>
-              <p>The conservation of landscape heritage through digital processing and machine learning.</p>
+            <div class="timeline-inner">
+              <div class="timeline-logo">
+                <img src="{{ '/images/sau_logo.png' | relative_url }}" alt="SAU Logo">
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-date">2024 - Present</div>
+                <div class="timeline-title">Xishu Classical Gardens Digital Lab, SAU</div>
+                <div class="timeline-subtitle">Research Assistant</div>
+                <p>The conservation of landscape heritage through digital processing and machine learning.</p>
+              </div>
             </div>
           </div>
 
+          <!-- Item 5: SAU (Undergrad) -->
           <div class="timeline-item animate" style="animation-delay: 200ms;">
             <div class="timeline-dot"></div>
-            <div class="timeline-content">
-              <div class="timeline-date">September 2022 - June 2027</div>
-              <div class="timeline-title">Sichuan Agricultural University</div>
-              <p>B.Sc. in Landscape Architecture<br>B.Sc. in Computer Science and Technology</p>
+            <div class="timeline-inner">
+              <div class="timeline-logo">
+                <img src="{{ '/images/sau_logo.png' | relative_url }}" alt="SAU Logo">
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-date">September 2022 - June 2027</div>
+                <div class="timeline-title">Sichuan Agricultural University</div>
+                <p>B.Sc. in Landscape Architecture<br>B.Sc. in Computer Science and Technology</p>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>
 
-    <!-- 页脚 -->
     <footer class="footer animate animate-delay-400">
       <div class="container">
         <div class="content footer-links has-text-centered">
@@ -773,7 +729,8 @@ layout: null
         <div class="columns is-centered has-text-centered">
           <div class="column is-8">
             <div class="content">
-              <p>Feel free to <a href="https://github.com/keunhong/keunhong.github.io">borrow this template</a>.</p>
+              <p>Feel free to <a href="https://github.com/ChunqiGuo02/chunqiguo02.github.io">borrow this template</a>.</p>
+              <p>This template is modified from <a href="https://github.com/keunhong/keunhong.github.io">the original version of Keunhong Park.</a></p>
             </div>
           </div>
         </div>
@@ -781,110 +738,133 @@ layout: null
     </footer>
   </div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script defer src="{{ '/js/fontawesome.all.min.js' | relative_url }}"></script>
-  <script src="{{ '/js/index.js' | relative_url }}"></script>
-  <script>
-    // 深色模式切换
-    const themeToggle = document.getElementById('theme-toggle');
-    const html = document.documentElement;
-    
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      html.classList.add('dark');
-      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script defer src="{{ '/js/fontawesome.all.min.js' | relative_url }}"></script>
+<script src="{{ '/js/index.js' | relative_url }}"></script>
+<script>
+  // 极简 Apple 风格 SVG 图标
+  // 太阳：中心圆+独立的射线
+  const iconSun = `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>`;
+  // 月亮：干净的线条
+  const iconMoon = `<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIconSpan = themeToggle.querySelector('.theme-icon');
+  const html = document.documentElement;
+
+  function renderThemeIcon(isDark) { themeIconSpan.innerHTML = isDark ? iconSun : iconMoon; }
+  function applyTheme(isDark) {
+    if (isDark) html.classList.add('dark'); else html.classList.remove('dark');
+    renderThemeIcon(isDark);
+  }
+
+  // 自动深浅模式逻辑优化
+  const localTheme = localStorage.getItem('theme');
+  const systemPref = window.matchMedia('(prefers-color-scheme: dark)');
+
+  if (localTheme === 'dark') {
+    applyTheme(true);
+  } else if (localTheme === 'light') {
+    applyTheme(false);
+  } else {
+    // 如果没有本地设置，跟随系统
+    applyTheme(systemPref.matches);
+  }
+
+  // 监听点击：点击后会写入 localStorage，之后不再跟随系统
+  themeToggle.addEventListener('click', () => {
+    const isDark = html.classList.contains('dark');
+    if (isDark) {
+      applyTheme(false);
+      localStorage.theme = 'light';
     } else {
-      html.classList.remove('dark');
-      themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+      applyTheme(true);
+      localStorage.theme = 'dark';
     }
-    
-    themeToggle.addEventListener('click', () => {
-      if (html.classList.contains('dark')) {
-        html.classList.remove('dark');
-        localStorage.theme = 'light';
-        themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-      } else {
-        html.classList.add('dark');
-        localStorage.theme = 'dark';
-        themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-      }
-    });
+  });
 
-    // 菜单功能
-    const menuBtn = document.getElementById('menu-btn');
-    const menuPanel = document.getElementById('menu-panel');
-    const menuOverlay = document.getElementById('menu-overlay');
-    const contentWrapper = document.getElementById('content-wrapper');
-    const glassHeader = document.querySelector('.glass-header');
-    const menuItems = document.querySelectorAll('.menu-item');
-    let isMenuOpen = false;
+  
 
-    // 菜单切换逻辑
-    menuBtn.addEventListener('click', () => {
-      if (isMenuOpen) {
-        menuPanel.classList.remove('active');
-        menuOverlay.classList.remove('active');
-        glassHeader.classList.remove('expanded');
-        contentWrapper.classList.remove('content-blur');
-        document.body.style.overflow = '';
-      } else {
-        menuPanel.classList.add('active');
-        menuOverlay.classList.add('active');
-        glassHeader.classList.add('expanded');
-        contentWrapper.classList.add('content-blur');
-        document.body.style.overflow = 'hidden';
-      }
-      isMenuOpen = !isMenuOpen;
-    });
+  let isMenuOpen = false;
+  let menuInteractionTimer = null; 
+  const ANIMATION_DURATION = 400; 
 
-    // 遮罩层关闭菜单
-    menuOverlay.addEventListener('click', () => {
-      if (isMenuOpen) {
-        menuPanel.classList.remove('active');
-        menuOverlay.classList.remove('active');
-        glassHeader.classList.remove('expanded');
-        contentWrapper.classList.remove('content-blur');
-        document.body.style.overflow = '';
-        isMenuOpen = false;
-      }
-    });
+  const glassHeader = document.querySelector('.glass-header');
+  const menuPanel = document.getElementById('menu-panel');
+  const menuOverlay = document.getElementById('menu-overlay');
+  const contentWrapper = document.getElementById('content-wrapper');
+  const menuItems = document.querySelectorAll('.menu-item');
+  const menuBtn = document.getElementById('menu-btn');
 
-    // 菜单项点击跳转并关闭菜单
-    menuItems.forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
-        const targetId = item.getAttribute('href');
-        const targetElement = document.querySelector(targetId);
-        if (targetElement) {
-          menuPanel.classList.remove('active');
-          menuOverlay.classList.remove('active');
-          glassHeader.classList.remove('expanded');
-          contentWrapper.classList.remove('content-blur');
-          document.body.style.overflow = '';
-          isMenuOpen = false;
-          setTimeout(() => {
-            targetElement.scrollIntoView({ behavior: 'smooth' });
-          }, 300);
-        }
-      });
-    });
+  function openMenu() {
+    clearTimeout(menuInteractionTimer);
+    if (isMenuOpen) return;
+    isMenuOpen = true;
+    glassHeader.classList.add('expanded');
+    menuPanel.classList.add('active');
+    menuOverlay.classList.add('active');
+    contentWrapper.classList.add('content-blur');
+    document.body.style.overflow = 'hidden';
+  }
 
-    // 顶栏logo平滑滚动到顶部
-    document.querySelector('.header-logo').addEventListener('click', (e) => {
+  function performClose() {
+    menuPanel.classList.remove('active');
+    menuOverlay.classList.remove('active');
+    glassHeader.classList.remove('expanded');
+    contentWrapper.classList.remove('content-blur');
+    document.body.style.overflow = '';
+    setTimeout(() => { isMenuOpen = false; }, ANIMATION_DURATION);
+  }
+
+  function triggerCloseDelay() {
+    clearTimeout(menuInteractionTimer);
+    menuInteractionTimer = setTimeout(() => { performClose(); }, 300); 
+  }
+
+  menuBtn.addEventListener('mouseenter', openMenu);
+  menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (isMenuOpen) performClose(); else openMenu();
+  });
+
+  glassHeader.addEventListener('mouseenter', () => clearTimeout(menuInteractionTimer));
+  menuPanel.addEventListener('mouseenter', () => clearTimeout(menuInteractionTimer));
+  glassHeader.addEventListener('mouseleave', triggerCloseDelay);
+  menuPanel.addEventListener('mouseleave', triggerCloseDelay);
+  menuOverlay.addEventListener('click', () => { clearTimeout(menuInteractionTimer); performClose(); });
+
+  menuItems.forEach(item => {
+    item.addEventListener('click', (e) => {
       e.preventDefault();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      const targetId = item.getAttribute('href');
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        clearTimeout(menuInteractionTimer);
+        performClose(); 
+        setTimeout(() => { targetElement.scrollIntoView({ behavior: 'smooth' }); }, 300);
+      }
     });
+  });
 
-    // 滚动时调整顶栏毛玻璃效果
-    window.addEventListener('scroll', () => {
+  document.querySelector('.header-logo').addEventListener('click', (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  window.addEventListener('scroll', () => {
+    if (!isMenuOpen) {
       const header = document.querySelector('.glass-header');
       if (window.scrollY > 50) {
-        header.style.backdropFilter = 'blur(12px)';
+        header.style.backdropFilter = 'blur(28px) saturate(1.8) brightness(0.98)';
+        header.style.webkitBackdropFilter = 'blur(28px) saturate(1.8) brightness(0.98)';
         header.style.borderBottom = '1px solid var(--border)';
       } else {
-        header.style.backdropFilter = 'blur(35px) brightness(1.05) contrast(1.1)';
+        header.style.backdropFilter = 'blur(28px) saturate(1.8) brightness(0.98)';
+        header.style.webkitBackdropFilter = 'blur(28px) saturate(1.8) brightness(0.98)';
         header.style.borderBottom = '1px solid transparent';
       }
-    });
-  </script>
+    }
+  });
+</script>
 </body>
 </html>
